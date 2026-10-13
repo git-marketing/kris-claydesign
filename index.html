@@ -41,7 +41,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font-family: var(--f-body); font-size: var(--step-0); line-height: 1.65; font-weight: 400;
@@ -91,9 +91,10 @@ p { margin: 0; }
   border: 1.5px solid var(--ink); background: var(--ink); color: #fff;
   transition: transform .2s, background .2s, border-color .2s, color .2s;
 }
-.btn:hover { transform: translateY(-2px); background: var(--pink); border-color: var(--pink); color: #fff; }
+@media (hover: hover) { .btn:hover { transform: translateY(-2px); background: var(--pink); border-color: var(--pink); color: #fff; } }
+.btn:active { background: var(--pink); border-color: var(--pink); color: #fff; }
 .btn.light { background: transparent; color: var(--ink); }
-.btn.light:hover { color: #fff; }
+@media (hover: hover) { .btn.light:hover { color: #fff; } }
 .btn svg { width: 20px; height: 20px; flex: none; }
 
 .stage { position: relative; justify-self: center; width: min(100%, 540px); }
@@ -157,7 +158,7 @@ section.block { padding-block: clamp(56px, 9vw, 112px); }
   aspect-ratio: 1; background: var(--sage);
   transition: transform .35s cubic-bezier(.2, .7, .2, 1), box-shadow .35s;
 }
-.grid button:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+@media (hover: hover) { .grid button:hover { transform: translateY(-4px); box-shadow: var(--shadow); } }
 .grid button:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
 .grid img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .4s; }
 .grid img.ok { opacity: 1; }
@@ -202,6 +203,7 @@ footer a:hover { color: var(--pink); }
   background: rgba(244, 248, 242, .96); backdrop-filter: blur(6px);
   padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px));
 }
+.lb[hidden] { display: none; }
 .lb figure { margin: 0; display: grid; gap: 12px; justify-items: center; }
 .lb img { width: min(86vw, 78vh, 900px); aspect-ratio: 1; border-radius: 24px; box-shadow: var(--shadow); background: var(--sage); }
 .lb figcaption { font-size: var(--step--1); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
@@ -214,6 +216,67 @@ footer a:hover { color: var(--pink); }
 .lb .prev { left: 16px; top: 50%; margin-top: -25px; }
 .lb .next { right: 16px; top: 50%; margin-top: -25px; }
 @media (max-width: 640px) { .lb .prev, .lb .next { top: auto; margin-top: 0; bottom: max(20px, env(safe-area-inset-bottom, 0px)); } }
+
+/* mobil */
+@media (max-width: 600px) {
+  :root { --step-0: 1rem; --step-1: 1.15rem; }
+  .top .wrap { padding-block: 8px; gap: 10px; }
+  .brand { gap: 9px; }
+  .brand .logo { width: 30px; height: 28px; }
+  .brand b { font-size: .85rem; letter-spacing: .18em; }
+  .brand small { font-size: .55rem; letter-spacing: .28em; }
+  .nav { gap: 14px; font-size: .92rem; }
+  .nav .ig { padding: 7px 14px; }
+
+  .hero .wrap { gap: 40px; padding-block: 32px 56px; }
+  .hero-text { gap: 16px; }
+  .hero h1 { font-size: clamp(2.3rem, 11vw, 2.8rem); }
+  .actions { width: 100%; }
+  .actions .btn { flex: 1 1 100%; justify-content: center; padding: 14px 20px; }
+  .stage { width: 84%; }
+  .sticker { border-width: 4px; }
+  .badge { width: 82px; height: 82px; font-size: .6rem; right: 0; }
+  .badge b { font-size: 1rem; }
+
+  .ribbon .track { gap: 28px; padding-block: 11px; }
+  .ribbon span { font-size: 1.1rem; gap: 28px; }
+
+  section.block { padding-block: 52px; }
+
+  /* filtre v jednom riadku s vodorovným posunom */
+  .filters {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); margin-bottom: 18px;
+    scroll-padding-inline: var(--gutter);
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .chip { flex: none; font-size: .9rem; padding: 8px 15px; }
+
+  /* galéria v dvoch stĺpcoch */
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .grid button { border-radius: 14px; }
+  .grid button span { left: 7px; bottom: 7px; font-size: .66rem; padding: 3px 8px; max-width: calc(100% - 14px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .more { margin-top: 24px; }
+  .more .btn { width: 100%; justify-content: center; }
+
+  .making .photo { max-width: 300px; justify-self: center; }
+  .steps { gap: 18px; }
+  .steps li { grid-template-columns: 42px minmax(0, 1fr); gap: 14px; }
+  .steps li::before { width: 42px; height: 42px; font-size: 1.3rem; }
+
+  .contact .wrap { gap: 18px; }
+  footer .wrap { flex-direction: column; align-items: center; text-align: center; padding-bottom: max(22px, env(safe-area-inset-bottom, 0px)); }
+
+  .lb img { width: min(92vw, 70vh); border-radius: 18px; }
+  .lb .ctl { width: 46px; height: 46px; }
+  .lb .prev { left: calc(50% - 58px); }
+  .lb .next { right: calc(50% - 58px); }
+}
+@media (max-width: 360px) {
+  .nav { gap: 10px; }
+  .brand small { display: none; }
+}
+body.lb-open { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -422,8 +485,8 @@ function showLb() {
   lbCap.textContent = label(it) + "  ·  " + (lbIdx + 1) + " / " + visible.length;
   [1, -1].forEach(d => { new Image().src = "img/" + visible[(lbIdx + d + visible.length) % visible.length].id + ".webp"; });
 }
-function openLb(i) { lastFocus = document.activeElement; lbIdx = i; showLb(); lb.hidden = false; document.getElementById("lbClose").focus(); }
-function closeLb() { lb.hidden = true; if (lastFocus) lastFocus.focus(); }
+function openLb(i) { lastFocus = document.activeElement; lbIdx = i; showLb(); lb.hidden = false; document.body.classList.add("lb-open"); document.getElementById("lbClose").focus(); }
+function closeLb() { lb.hidden = true; document.body.classList.remove("lb-open"); if (lastFocus) lastFocus.focus(); }
 function step(d) { lbIdx = (lbIdx + d + visible.length) % visible.length; showLb(); }
 document.getElementById("lbClose").addEventListener("click", closeLb);
 document.getElementById("lbPrev").addEventListener("click", () => step(-1));
