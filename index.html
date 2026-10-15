@@ -546,7 +546,7 @@ lb.addEventListener("touchend", e => {
   if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
 });
 /* videá z tvorby: vlastné mp4 (src + poster) alebo odkaz na Instagram reel (ig) */
-const VIDEOS = [];
+const VIDEOS = [{"src": "vid/tvorba-1.mp4", "poster": "vid/tvorba-1.webp", "text": "Lupene s farebným prechodom"}, {"src": "vid/tvorba-2.mp4", "poster": "vid/tvorba-2.webp", "text": "Ružový kvet krok za krokom"}];
 if (VIDEOS.length) {
   const row = document.getElementById("reels");
   let igScript = false;
