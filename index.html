@@ -170,6 +170,12 @@ section.block { padding-block: clamp(60px, 9vw, 116px); }
 .reel .instagram-media { min-width: 0 !important; margin: 0 !important; box-shadow: none !important; }
 @media (max-width: 640px) { .reel { width: min(100%, 300px); } .reel:nth-child(even) { margin-top: 0; } }
 
+/* celá kolekcia na stojane */
+.stand .head { margin-inline: auto; text-align: center; justify-items: center; }
+.stand-pic { margin: 0 auto clamp(34px, 6vw, 64px); max-width: 1180px; }
+.stand-pic img { width: 100%; height: auto; display: block; filter: drop-shadow(0 22px 26px rgba(30, 36, 44, .28)); }
+.stand .reel { background: var(--paper); }
+
 /* o mne + vizitky */
 .about { position: relative; }
 .about .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 84px); align-items: center; }
@@ -336,6 +342,20 @@ body.lb-open { overflow: hidden; }
       <div class="filters" id="filters" role="group" aria-label="Filtrovať podľa motívu"></div>
       <div class="grid" id="grid"></div>
       <div class="more"><button class="btn light" id="moreBtn" type="button">Zobraziť ďalšie</button></div>
+    </div>
+  </section>
+
+  <section class="block stand glitter" id="stojan">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Celá kolekcia</p>
+        <h2>Stovky párov <em>naraz</em></h2>
+        <p>Takto vyzerá kolekcia pripravená na predaj – každý pár je originál.</p>
+      </div>
+      <figure class="stand-pic" style="margin-top:0">
+        <img src="img/kolekcia.webp" srcset="img/kolekcia-s.webp 800w, img/kolekcia.webp 1400w" sizes="(max-width: 1200px) 100vw, 1180px" alt="Stojan plný ručne robených náušníc na kartičkách" width="1400" height="520" loading="lazy">
+      </figure>
+      <div class="reel-row" id="reels-kolekcia"></div>
     </div>
   </section>
 
@@ -546,14 +566,14 @@ lb.addEventListener("touchend", e => {
   if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
 });
 /* videá z tvorby: vlastné mp4 (src + poster) alebo odkaz na Instagram reel (ig) */
-const VIDEOS = [{"src": "vid/tvorba-1.mp4", "poster": "vid/tvorba-1.webp", "text": "Lupene s farebným prechodom"}, {"src": "vid/tvorba-2.mp4", "poster": "vid/tvorba-2.webp", "text": "Ružový kvet krok za krokom"}];
+const VIDEOS = [{"src": "vid/tvorba-1.mp4", "poster": "vid/tvorba-1.webp", "text": "Lupene s farebným prechodom"}, {"src": "vid/tvorba-2.mp4", "poster": "vid/tvorba-2.webp", "text": "Ružový kvet krok za krokom"}, {"src": "vid/kolekcia-1.mp4", "poster": "vid/kolekcia-1.webp", "text": "Hotové kúsky pred balením", "row": "kolekcia"}, {"src": "vid/kolekcia-2.mp4", "poster": "vid/kolekcia-2.webp", "text": "Pripravené na kartičkách", "row": "kolekcia"}];
 if (VIDEOS.length) {
-  const row = document.getElementById("reels");
   let igScript = false;
   const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause();
   }), { threshold: .3 }) : null;
   for (const v of VIDEOS) {
+    const row = document.getElementById(v.row === "kolekcia" ? "reels-kolekcia" : "reels");
     const fig = document.createElement("figure");
     fig.className = "reel"; fig.style.margin = "0";
     if (v.src) {
@@ -574,7 +594,7 @@ if (VIDEOS.length) {
     row.appendChild(fig);
   }
   if (igScript) { const s = document.createElement("script"); s.async = true; s.src = "https://www.instagram.com/embed.js"; document.body.appendChild(s); }
-  document.getElementById("tvorba").hidden = false;
+  if (VIDEOS.some(v => v.row !== "kolekcia")) document.getElementById("tvorba").hidden = false;
 }
 document.getElementById("year").textContent = new Date().getFullYear();
 renderFilters(); renderGrid();
