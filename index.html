@@ -142,6 +142,12 @@ section.block { padding-block: clamp(60px, 9vw, 116px); }
 .chip:hover { border-color: var(--ink); }
 .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
 .chip .n { font-variant-numeric: tabular-nums; opacity: .6; margin-left: 6px; font-weight: 400; }
+.chip.new { border-color: var(--sage); color: var(--sage); }
+.chip.new::before { content: "★ "; }
+.chip.new[aria-pressed="true"] { background: var(--sage); border-color: var(--sage); color: #fff; }
+.grid button .badge {
+  left: auto; right: 10px; bottom: auto; top: 10px; background: var(--sage); color: #fff;
+}
 
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: clamp(10px, 1.6vw, 18px); }
 .grid button {
@@ -158,6 +164,25 @@ section.block { padding-block: clamp(60px, 9vw, 116px); }
   background: rgba(255, 255, 255, .92); color: var(--ink); padding: 5px 10px; border-radius: 2px;
 }
 .more { display: flex; justify-content: center; margin-top: 34px; }
+
+/* vyskakovacie okno s videom (pozvánka na akciu) */
+.promo { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px;
+  background: rgba(20, 24, 30, .62); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  opacity: 0; transition: opacity .35s; }
+.promo[hidden] { display: none; }
+.promo.on { opacity: 1; }
+.promo .box { position: relative; width: min(440px, 100%, calc((100dvh - 120px) * .8)); background: var(--paper);
+  padding: 10px; box-shadow: var(--shadow); transform: translateY(14px) scale(.98); transition: transform .35s cubic-bezier(.2, .7, .2, 1); }
+.promo.on .box { transform: none; }
+.promo video { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: #2a2622; }
+.promo .bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 2px 2px; }
+.promo .bar a { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; }
+.promo .bar a:hover { color: var(--sage); }
+.promo .x, .promo .snd { position: absolute; width: 40px; height: 40px; border: 0; border-radius: 50%; cursor: pointer;
+  background: rgba(255, 255, 255, .92); color: var(--ink); box-shadow: var(--shadow-s); display: grid; place-items: center; font-size: 1.3rem; line-height: 1; }
+.promo .x { top: -14px; right: -14px; }
+.promo .snd { left: 20px; bottom: 58px; font-size: 1rem; }
+@media (max-width: 640px) { .promo .x { top: 6px; right: 6px; } }
 
 /* videá z tvorby */
 .reels { background: var(--paper); }
@@ -337,7 +362,7 @@ body.lb-open { overflow: hidden; }
       <div class="head">
         <p class="eyebrow">Kolekcia</p>
         <h2>Vyberte si <em>svoj</em> pár</h2>
-        <p>Napichovačky aj visiace náušnice v letných farbách. Kliknutím na fotku si ju zväčšíte.</p>
+        <p>Napichovačky aj visiace náušnice – letné kvety aj vianočné motívy. Kliknutím na fotku si ju zväčšíte.</p>
       </div>
       <div class="filters" id="filters" role="group" aria-label="Filtrovať podľa motívu"></div>
       <div class="grid" id="grid"></div>
@@ -438,6 +463,15 @@ body.lb-open { overflow: hidden; }
   </div>
 </footer>
 
+<div class="promo" id="promo" hidden role="dialog" aria-modal="true" aria-label="Pozvánka: Blšák v Prievidzi 31. 10. 2026">
+  <div class="box">
+    <video id="promoVid" muted loop playsinline preload="none" poster="vid/blsak.webp" aria-label="Video: Vidíme sa na Blšáku v Prievidzi, 31. 10. 2026, sídlisko Píly"></video>
+    <button class="snd" id="promoSnd" type="button" aria-label="Zapnúť zvuk">🔇</button>
+    <div class="bar"><span class="eyebrow">31. 10. · Prievidza, Píly</span><a href="#kolekcia" id="promoGo">Pozrieť kolekciu</a></div>
+    <button class="x" id="promoX" type="button" aria-label="Zavrieť">×</button>
+  </div>
+</div>
+
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Zväčšená fotka">
   <button class="ctl close" id="lbClose" type="button" aria-label="Zavrieť">×</button>
   <button class="ctl prev" id="lbPrev" type="button" aria-label="Predchádzajúca">‹</button>
@@ -455,24 +489,29 @@ const CATS = {
   more: "More",
   tvary: "Geometrické tvary",
   spiraly: "Špirály a krúžky",
+  vianoce: "Vianočné",
   visiace: "Visiace"
 };
 // čísla fotiek podľa motívu; ostatné sú kvety
 const TAGS = {
   ovocie: [10, 13, 28, 31, 56, 62],
   more: [5, 15, 38, 41, 42, 61, 72, 73, 82],
-  tvary: [8, 14, 19, 39, 49, 53, 58, 65, 67, 76],
+  tvary: [8, 14, 19, 39, 49, 53, 58, 65, 67, 76, 88, 91, 93, 94, 99, 100, 101],
   spiraly: [1, 6, 34, 36, 46],
-  visiace: [36, 74, 81, 82]
+  vianoce: [84, 86, 90, 92, 95, 96, 97],
+  visiace: [36, 74, 81, 82, 87, 98]
 };
+// najnovšie fotky (21. 10. 2026) – tlačidlo Najnovšie, štítok Nové a poradie na začiatku
+const NEW = [90, 95, 87, 92, 84, 96, 85, 98, 97, 89, 86, 93, 100, 91, 99, 94, 88, 101];
+const LAST = 101;
 const SKIP = [24, 73];
-const ORDER = [40, 56, 72, 4, 62, 81, 31, 47, 61, 21, 13, 9, 82, 44, 10, 63, 5, 74, 28, 35, 15, 80, 46, 3, 39, 68, 42, 55, 1, 23];
+const ORDER = [...NEW, 40, 56, 72, 4, 62, 81, 31, 47, 61, 21, 13, 9, 82, 44, 10, 63, 5, 74, 28, 35, 15, 80, 46, 3, 39, 68, 42, 55, 1, 23];
 const items = [];
-for (let n = 1; n <= 83; n++) {
+for (let n = 1; n <= LAST; n++) {
   if (SKIP.includes(n)) continue;
   const tags = Object.keys(TAGS).filter(k => TAGS[k].includes(n));
   if (!tags.some(t => t !== "visiace")) tags.unshift("kvety");
-  items.push({ n, tags, id: "nausnice-" + String(n).padStart(2, "0") });
+  items.push({ n, tags, isNew: NEW.includes(n), id: "nausnice-" + String(n).padStart(2, "0") });
 }
 items.sort((a, b) => {
   const ia = ORDER.indexOf(a.n), ib = ORDER.indexOf(b.n);
@@ -485,13 +524,13 @@ const PAGE = 24;
 let current = "vsetko", shown = PAGE, visible = [];
 const label = it => it.tags.map(t => CATS[t]).join(" · ");
 function renderFilters() {
-  const all = [["vsetko", "Všetko", items.length]].concat(
+  const all = [["vsetko", "Všetko", items.length], ["najnovsie", "Najnovšie", items.filter(i => i.isNew).length]].concat(
     Object.keys(CATS).map(k => [k, CATS[k], items.filter(i => i.tags.includes(k)).length])
   );
   filters.innerHTML = "";
   for (const [key, name, count] of all) {
     const b = document.createElement("button");
-    b.type = "button"; b.className = "chip";
+    b.type = "button"; b.className = key === "najnovsie" ? "chip new" : "chip";
     b.setAttribute("aria-pressed", key === current);
     b.innerHTML = name + '<span class="n">' + count + "</span>";
     b.addEventListener("click", () => { current = key; shown = PAGE; renderFilters(); renderGrid(); });
@@ -499,7 +538,7 @@ function renderFilters() {
   }
 }
 function renderGrid() {
-  visible = items.filter(i => current === "vsetko" || i.tags.includes(current));
+  visible = items.filter(i => current === "vsetko" || (current === "najnovsie" ? i.isNew : i.tags.includes(current)));
   grid.innerHTML = "";
   visible.slice(0, shown).forEach((it, idx) => {
     const b = document.createElement("button");
@@ -517,6 +556,7 @@ function renderGrid() {
     const tag = document.createElement("span");
     tag.textContent = CATS[it.tags[0]];
     b.append(img, tag);
+    if (it.isNew) { const nb = document.createElement("span"); nb.className = "badge"; nb.textContent = "Nové"; b.appendChild(nb); }
     b.addEventListener("click", () => openLb(idx));
     grid.appendChild(b);
   });
@@ -596,6 +636,45 @@ if (VIDEOS.length) {
   if (igScript) { const s = document.createElement("script"); s.async = true; s.src = "https://www.instagram.com/embed.js"; document.body.appendChild(s); }
   if (VIDEOS.some(v => v.row !== "kolekcia")) document.getElementById("tvorba").hidden = false;
 }
+/* vyskakovacie okno: do konca akcie, raz za návštevu; video sa načíta až po stránke */
+(() => {
+  const END = new Date("2026-11-01T00:00:00");
+  const KEY = "promo-blsak-2026";
+  let seen = false;
+  try { seen = sessionStorage.getItem(KEY) === "1"; } catch (e) {}
+  if (new Date() >= END || seen) return;
+  const box = document.getElementById("promo"), vid = document.getElementById("promoVid"),
+        snd = document.getElementById("promoSnd");
+  let prev = null;
+  const close = () => {
+    box.classList.remove("on"); vid.pause();
+    setTimeout(() => { box.hidden = true; vid.removeAttribute("src"); vid.load(); }, 350);
+    try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
+    document.removeEventListener("keydown", onKey);
+    if (prev) prev.focus();
+  };
+  const onKey = e => { if (e.key === "Escape") close(); };
+  const open = () => {
+    prev = document.activeElement;
+    vid.src = "vid/blsak.mp4";
+    box.hidden = false;
+    requestAnimationFrame(() => box.classList.add("on"));
+    vid.play().catch(() => { vid.controls = true; });
+    document.getElementById("promoX").focus({ preventScroll: true });
+    document.addEventListener("keydown", onKey);
+  };
+  snd.addEventListener("click", () => {
+    vid.muted = !vid.muted;
+    snd.textContent = vid.muted ? "🔇" : "🔊";
+    snd.setAttribute("aria-label", vid.muted ? "Zapnúť zvuk" : "Vypnúť zvuk");
+    if (!vid.muted) vid.play().catch(() => {});
+  });
+  document.getElementById("promoX").addEventListener("click", close);
+  document.getElementById("promoGo").addEventListener("click", close);
+  box.addEventListener("click", e => { if (e.target === box) close(); });
+  const start = () => setTimeout(open, 900);
+  if (document.readyState === "complete") start(); else window.addEventListener("load", start, { once: true });
+})();
 document.getElementById("year").textContent = new Date().getFullYear();
 renderFilters(); renderGrid();
 </script>
