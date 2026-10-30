@@ -208,6 +208,27 @@ section.block { padding-block: clamp(60px, 9vw, 116px); }
 .stand-pic img { width: 100%; height: auto; display: block; filter: drop-shadow(0 22px 26px rgba(30, 36, 44, .28)); }
 .stand .reel { background: var(--paper); }
 
+/* darček s venovaním */
+.dedic { background: var(--sage-soft); }
+.dedic .wrap > .top { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(28px, 6vw, 84px); align-items: center; margin-bottom: clamp(34px, 6vw, 64px); }
+.dedic .frame { max-width: 420px; transform: rotate(-1.4deg); justify-self: center; }
+.dedic .frame img { width: 100%; height: auto; display: block; aspect-ratio: 3 / 4; object-fit: cover; }
+.dedic .head { margin-bottom: 0; }
+.dedic .who { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; padding: 0; list-style: none; }
+.dedic .who li { border: 1px solid var(--sage); color: var(--sage); background: var(--paper); padding: 7px 14px; border-radius: 999px; font-size: .78rem; letter-spacing: .06em; }
+.dedic .who li em { font-family: var(--f-display); }
+.dedic .note { font-size: .9rem; }
+.dedic .btn { justify-self: start; margin-top: 8px; }
+.dgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(46%, 200px), 1fr)); gap: clamp(10px, 1.6vw, 18px); }
+.dgrid button { all: unset; cursor: zoom-in; position: relative; display: block; overflow: hidden; aspect-ratio: 3 / 4; background: var(--mist); border-radius: 3px; transition: transform .35s cubic-bezier(.2, .7, .2, 1), box-shadow .35s; }
+@media (hover: hover) { .dgrid button:hover { transform: translateY(-4px); box-shadow: var(--shadow); } }
+.dgrid button:focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+.dgrid img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .4s; }
+.dgrid img.ok { opacity: 1; }
+.dgrid span { position: absolute; left: 8px; bottom: 8px; font-size: .64rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; background: rgba(255, 255, 255, .92); color: var(--ink); padding: 4px 9px; border-radius: 2px; }
+.lb.tall .pic { aspect-ratio: 3 / 4; width: min(90vw, calc(80vh * .75), 750px); }
+@media (max-width: 860px) { .dedic .wrap > .top { grid-template-columns: 1fr; } .dedic .frame { max-width: 320px; } }
+
 /* o mne + vizitky */
 .about { position: relative; }
 .about .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 84px); align-items: center; }
@@ -316,6 +337,7 @@ body.lb-open { overflow: hidden; }
 
   .lb { padding-inline: 0; }
   .lb .pic { width: 100vw; max-height: 78vh; box-shadow: none; border-radius: 0; }
+  .lb.tall .pic { width: min(100vw, calc(78vh * .75)); }
   .lb .ctl { width: 46px; height: 46px; }
   .lb .prev, .lb .next { top: auto; margin-top: 0; bottom: max(18px, env(safe-area-inset-bottom, 0px)); }
   .lb .prev { left: calc(50% - 58px); }
@@ -337,6 +359,7 @@ body.lb-open { overflow: hidden; }
     </a>
     <nav class="nav" aria-label="Hlavná navigácia">
       <a href="#kolekcia">Kolekcia</a>
+      <a class="hide-s" href="#venovanie">Venovanie</a>
       <a class="hide-s" href="#o-mne">O mne</a>
       <a class="hide-s" href="#vyroba">Výroba</a>
       <a class="ig" href="#kontakt">Kontakt</a>
@@ -388,6 +411,25 @@ body.lb-open { overflow: hidden; }
         <img src="img/kolekcia.webp" srcset="img/kolekcia-s.webp 800w, img/kolekcia.webp 1400w" sizes="(max-width: 1200px) 100vw, 1180px" alt="Stojan plný ručne robených náušníc na kartičkách" width="1400" height="520" loading="lazy">
       </figure>
       <div class="reel-row" id="reels-kolekcia"></div>
+    </div>
+  </section>
+
+  <section class="block dedic" id="venovanie">
+    <div class="wrap">
+      <div class="top">
+        <div class="frame"><img src="img/venovanie-14.webp" srcset="img/venovanie-14-s.webp 480w, img/venovanie-14.webp 900w" sizes="(max-width: 860px) 320px, 420px" alt="Srdiečkové náušnice na kartičkách s venovaním Babičke, Katke, Pani učiteľke a Najlepšej kamarátke" width="900" height="1200" loading="lazy"></div>
+        <div class="head">
+          <p class="eyebrow">Darček s venovaním</p>
+          <h2>Pre tú, ktorá má srdce <em>na správnom mieste</em></h2>
+          <p>Srdiečkové náušnice na kartičke s venovaním – hotový darček, ktorý netreba baliť. Vyberte si venovanie alebo mi napíšte meno, ktoré má byť na kartičke.</p>
+          <ul class="who">
+            <li>Mamičke</li><li>Babičke</li><li>Pani učiteľke</li><li>Najlepšej kamarátke</li><li><em>vlastné meno</em> – napr. Katke</li>
+          </ul>
+          <p class="note">Srdiečka v bielej, ružovej, červenej, marhuľovej, modrej aj zelenej farbe.</p>
+          <a class="btn" href="https://ig.me/m/kris.claydesign" target="_blank" rel="noopener">Objednať s venovaním</a>
+        </div>
+      </div>
+      <div class="dgrid" id="dgrid"></div>
     </div>
   </section>
 
@@ -529,7 +571,7 @@ const filters = document.getElementById("filters");
 const moreBtn = document.getElementById("moreBtn");
 const PAGE = 24;
 let current = "vsetko", shown = PAGE, visible = [];
-const label = it => it.tags.map(t => CATS[t]).join(" · ");
+const label = it => it.cap || it.tags.map(t => CATS[t]).join(" · ");
 function renderFilters() {
   const all = [["vsetko", "Všetko", items.length], ["najnovsie", "Najnovšie", items.filter(i => i.isNew).length]].concat(
     Object.keys(CATS).map(k => [k, CATS[k], items.filter(i => i.tags.includes(k)).length])
@@ -582,19 +624,20 @@ function setFull(img, it) {
   img.src = "img/" + it.id + "-xl.webp";
 }
 function showLb() {
-  const it = visible[lbIdx];
+  const it = lbList[lbIdx];
   lbLow.src = "img/" + it.id + "-s.webp";
   lbImg.classList.remove("ok");
-  lbImg.onload = () => { if (visible[lbIdx] === it) lbImg.classList.add("ok"); };
+  lbImg.onload = () => { if (lbList[lbIdx] === it) lbImg.classList.add("ok"); };
   setFull(lbImg, it);
   if (lbImg.complete && lbImg.naturalWidth) lbImg.classList.add("ok");
   lbImg.alt = "Ručne robené náušnice – " + label(it);
-  lbCap.textContent = label(it) + "  ·  " + (lbIdx + 1) + " / " + visible.length;
-  [1, -1].forEach(d => setFull(new Image(), visible[(lbIdx + d + visible.length) % visible.length]));
+  lbCap.textContent = label(it) + "  ·  " + (lbIdx + 1) + " / " + lbList.length;
+  [1, -1].forEach(d => setFull(new Image(), lbList[(lbIdx + d + lbList.length) % lbList.length]));
 }
-function openLb(i) { lastFocus = document.activeElement; lbIdx = i; showLb(); lb.hidden = false; document.body.classList.add("lb-open"); document.getElementById("lbClose").focus(); }
+let lbList = [];
+function openLb(i, list) { lastFocus = document.activeElement; lbIdx = i; lbList = list || visible; lb.classList.toggle("tall", !!lbList[0].tall); showLb(); lb.hidden = false; document.body.classList.add("lb-open"); document.getElementById("lbClose").focus(); }
 function closeLb() { lb.hidden = true; document.body.classList.remove("lb-open"); if (lastFocus) lastFocus.focus(); }
-function step(d) { lbIdx = (lbIdx + d + visible.length) % visible.length; showLb(); }
+function step(d) { lbIdx = (lbIdx + d + lbList.length) % lbList.length; showLb(); }
 document.getElementById("lbClose").addEventListener("click", closeLb);
 document.getElementById("lbPrev").addEventListener("click", () => step(-1));
 document.getElementById("lbNext").addEventListener("click", () => step(1));
@@ -681,6 +724,30 @@ if (VIDEOS.length) {
   box.addEventListener("click", e => { if (e.target === box) close(); });
   const start = () => setTimeout(open, 900);
   if (document.readyState === "complete") start(); else window.addEventListener("load", start, { once: true });
+})();
+/* galéria náušníc s venovaním: pôvodné fotky 3:4 */
+const DEDIC = ["Mamičke", "Pani učiteľke", "Najlepšej kamarátke", "Babičke", "Katke – meno na želanie", "Mamičke",
+  "Pani učiteľke · Kamarátke", "Mamičke", "Mamičke", "Mamičke", "Mamičke", "Mamičke", "Mamičke",
+  "Babičke · Katke · Pani učiteľke · Kamarátke"].map((cap, i) => ({ cap, tall: true, id: "venovanie-" + String(i + 1).padStart(2, "0") }));
+(() => {
+  const g = document.getElementById("dgrid");
+  DEDIC.forEach((it, idx) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("aria-label", "Zväčšiť: náušnice s venovaním " + it.cap);
+    const img = new Image(480, 640);
+    img.alt = "Srdiečkové náušnice na kartičke s venovaním – " + it.cap;
+    img.loading = "lazy"; img.decoding = "async";
+    img.onload = () => img.classList.add("ok");
+    img.srcset = "img/" + it.id + "-s.webp 480w, img/" + it.id + ".webp 900w";
+    img.sizes = "(max-width: 640px) 46vw, 220px";
+    img.src = "img/" + it.id + "-s.webp";
+    const tag = document.createElement("span");
+    tag.textContent = it.cap.split(" – ")[0].split(" · ")[0];
+    b.append(img, tag);
+    b.addEventListener("click", () => openLb(idx, DEDIC));
+    g.appendChild(b);
+  });
 })();
 document.getElementById("year").textContent = new Date().getFullYear();
 renderFilters(); renderGrid();
