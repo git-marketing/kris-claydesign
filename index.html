@@ -210,7 +210,7 @@ section.block { padding-block: clamp(60px, 9vw, 116px); }
 
 /* darček s venovaním */
 .dedic { background: var(--sage-soft); }
-.dedic .wrap > .top { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(28px, 6vw, 84px); align-items: center; margin-bottom: clamp(34px, 6vw, 64px); }
+.dedic .dtop { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(28px, 6vw, 84px); align-items: center; margin-bottom: clamp(34px, 6vw, 64px); }
 .dedic .frame { max-width: 420px; transform: rotate(-1.4deg); justify-self: center; }
 .dedic .frame img { width: 100%; height: auto; display: block; aspect-ratio: 3 / 4; object-fit: cover; }
 .dedic .head { margin-bottom: 0; }
@@ -227,7 +227,7 @@ section.block { padding-block: clamp(60px, 9vw, 116px); }
 .dgrid img.ok { opacity: 1; }
 .dgrid span { position: absolute; left: 8px; bottom: 8px; font-size: .64rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; background: rgba(255, 255, 255, .92); color: var(--ink); padding: 4px 9px; border-radius: 2px; }
 .lb.tall .pic { aspect-ratio: 3 / 4; width: min(90vw, calc(80vh * .75), 750px); }
-@media (max-width: 860px) { .dedic .wrap > .top { grid-template-columns: 1fr; } .dedic .frame { max-width: 320px; } }
+@media (max-width: 860px) { .dedic .dtop { grid-template-columns: 1fr; } .dedic .frame { max-width: 320px; } }
 
 /* o mne + vizitky */
 .about { position: relative; }
@@ -416,7 +416,7 @@ body.lb-open { overflow: hidden; }
 
   <section class="block dedic" id="venovanie">
     <div class="wrap">
-      <div class="top">
+      <div class="dtop">
         <div class="frame"><img src="img/venovanie-14.webp" srcset="img/venovanie-14-s.webp 480w, img/venovanie-14.webp 900w" sizes="(max-width: 860px) 320px, 420px" alt="Srdiečkové náušnice na kartičkách s venovaním Babičke, Katke, Pani učiteľke a Najlepšej kamarátke" width="900" height="1200" loading="lazy"></div>
         <div class="head">
           <p class="eyebrow">Darček s venovaním</p>
