@@ -512,11 +512,11 @@ body.lb-open { overflow: hidden; }
   </div>
 </footer>
 
-<div class="promo" id="promo" hidden role="dialog" aria-modal="true" aria-label="Pozvánka: Blšák v Prievidzi 31. 10. 2026">
+<div class="promo" id="promo" hidden role="dialog" aria-modal="true" aria-label="Pozvánka: Remeselný zimný trh v Banskej Bystrici 21. 11. 2026">
   <div class="box">
-    <video id="promoVid" muted loop playsinline preload="none" poster="vid/blsak.webp" aria-label="Video: Vidíme sa na Blšáku v Prievidzi, 31. 10. 2026, sídlisko Píly"></video>
-    <button class="snd" id="promoSnd" type="button" aria-label="Zapnúť zvuk">🔇</button>
-    <div class="bar"><span class="eyebrow">31. 10. · Prievidza, Píly</span><a href="#kolekcia" id="promoGo">Pozrieť kolekciu</a></div>
+    <video id="promoVid" loop playsinline preload="none" poster="vid/zimny-trh.webp" aria-label="Video: Vidíme sa na Remeselnom zimnom trhu, 21. 11. 2026, 9:00 – 16:00, MC Mamina, Tatranská 10, Banská Bystrica"></video>
+    <button class="snd" id="promoSnd" type="button" aria-label="Vypnúť zvuk">🔊</button>
+    <div class="bar"><span class="eyebrow">21. 11. · MC Mamina, Banská Bystrica</span><a href="#kolekcia" id="promoGo">Pozrieť kolekciu</a></div>
     <button class="x" id="promoX" type="button" aria-label="Zavrieť">×</button>
   </div>
 </div>
@@ -688,8 +688,8 @@ if (VIDEOS.length) {
 }
 /* vyskakovacie okno: do konca akcie, raz za návštevu; video sa načíta až po stránke */
 (() => {
-  const END = new Date("2026-11-01T00:00:00");
-  const KEY = "promo-blsak-2026";
+  const END = new Date("2026-11-22T00:00:00");
+  const KEY = "promo-zimny-trh-2026";
   let seen = false;
   try { seen = sessionStorage.getItem(KEY) === "1"; } catch (e) {}
   if (new Date() >= END || seen) return;
@@ -706,17 +706,32 @@ if (VIDEOS.length) {
   const onKey = e => { if (e.key === "Escape") close(); };
   const open = () => {
     prev = document.activeElement;
-    vid.src = "vid/blsak.mp4";
+    vid.src = "vid/zimny-trh.mp4";
     box.hidden = false;
     requestAnimationFrame(() => box.classList.add("on"));
-    vid.play().catch(() => { vid.controls = true; });
+    // najprv so zvukom; ak to prehliadač bez kliknutia nedovolí, hrá potichu
+    // a zvuk sa zapne pri prvom dotyku / kliknutí / klávese na stránke
+    vid.muted = false; setSnd();
+    vid.play().catch(() => {
+      vid.muted = true; setSnd();
+      vid.play().catch(() => { vid.controls = true; });
+      const wake = e => {
+        ["pointerdown", "keydown", "touchstart"].forEach(t => document.removeEventListener(t, wake, true));
+        if (userMuted || box.hidden || e.target.closest("#promoX, #promoSnd")) return;
+        vid.muted = false; setSnd(); vid.play().catch(() => {});
+      };
+      ["pointerdown", "keydown", "touchstart"].forEach(t => document.addEventListener(t, wake, true));
+    });
     document.getElementById("promoX").focus({ preventScroll: true });
     document.addEventListener("keydown", onKey);
   };
-  snd.addEventListener("click", () => {
-    vid.muted = !vid.muted;
+  let userMuted = false;
+  function setSnd() {
     snd.textContent = vid.muted ? "🔇" : "🔊";
     snd.setAttribute("aria-label", vid.muted ? "Zapnúť zvuk" : "Vypnúť zvuk");
+  }
+  snd.addEventListener("click", () => {
+    vid.muted = !vid.muted; userMuted = vid.muted; setSnd();
     if (!vid.muted) vid.play().catch(() => {});
   });
   document.getElementById("promoX").addEventListener("click", close);
